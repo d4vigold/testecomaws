@@ -1,13 +1,22 @@
 import { Router } from 'express';
 import multer from 'multer';
-import { uploadFileController } from '../controladores/uploadImagem.ts';
+import { 
+    uploadFileController,
+    getFileController,
+    deleteFileController
+} from '../controladores/imagem.ts';
 
-const roteador = Router();
+const router = Router();
 
-// Configuração do Multer para armazenar o arquivo em memória
+// Configuração do Multer para upload
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-roteador.post('/upload', upload.single('image'), uploadFileController);
+// Rotas para as operações
+router.post('/', upload.single('image'), uploadFileController); // Rota de UPLOAD
 
-export default roteador;
+router.get('/:keyName', getFileController);    // Rota para GET (ex: GET /upload/uploads/imagem.jpg)
+
+router.delete('/:keyName', deleteFileController); // Rota para DELETE (ex: DELETE /upload/uploads/imagem.jpg)
+
+export default router;
